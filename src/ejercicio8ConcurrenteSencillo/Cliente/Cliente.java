@@ -1,14 +1,13 @@
-package ejercicio8.Cliente;
+package ejercicio8ConcurrenteSencillo.Cliente;
 
-import ejercicio8.ConsoleInput;
-import ejercicio8.Constante.ConstanteGlobal;
+import ejercicio8ConcurrenteSencillo.ConsoleInput;
+import ejercicio8ConcurrenteSencillo.Constante.ConstanteGlobal;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
 import static ejercicio7NoTerminado.Cliente.Constantes.*;
-import static ejercicio7NoTerminado.Cliente.Constantes.TEXT_RESTA;
 
 public class Cliente {
     private final DatagramSocket socket;

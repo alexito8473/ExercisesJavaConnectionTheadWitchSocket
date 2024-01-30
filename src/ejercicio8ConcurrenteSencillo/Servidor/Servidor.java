@@ -1,7 +1,6 @@
-package ejercicio8.Servidor;
+package ejercicio8ConcurrenteSencillo.Servidor;
 
-import ejercicio8.Cliente.Constantes;
-import ejercicio8.Constante.ConstanteGlobal;
+import ejercicio8ConcurrenteSencillo.Constante.ConstanteGlobal;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -41,13 +40,13 @@ public class Servidor {
         boolean salida = false;
         recibirDatos();
         do {
-            enviarDatosString(ejercicio8.Servidor.Constantes.TEXT_MENU);
+            enviarDatosString(Constantes.TEXT_MENU);
             try {
                 tipo = Integer.valueOf(recibirDatos());
                 int finalTipo = tipo;
-                if ( Arrays.stream(ejercicio8.Servidor.Constantes.tiposOperacion).anyMatch(t -> t == finalTipo) ) {
+                if ( Arrays.stream(Constantes.tiposOperacion).anyMatch(t -> t == finalTipo) ) {
                     enviarDatosBoolean(true);
-                    if ( tipo == ejercicio8.Servidor.Constantes.NUM_SALIR ) {
+                    if ( tipo == Constantes.NUM_SALIR ) {
                         salida = false;
                         enviarDatosBoolean(true);
                     } else {
@@ -72,7 +71,7 @@ public class Servidor {
             datos = new DatagramPacket(mensajeBytes, mensajeBytes.length, destinoIP, puerto);
             socket.send(datos);
         } else {
-            System.out.println(Constantes.WARNING_MAX_LENGTH);
+            System.out.println(ejercicio8ConcurrenteSencillo.Cliente.Constantes.WARNING_MAX_LENGTH);
         }
     }
 

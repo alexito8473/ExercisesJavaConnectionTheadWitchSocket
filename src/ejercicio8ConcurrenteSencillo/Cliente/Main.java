@@ -1,11 +1,5 @@
-package ejercicio8.Cliente;
+package ejercicio8ConcurrenteSencillo.Cliente;
 
-
-import ejercicio8.ConsoleInput;
-
-import java.util.Scanner;
-
-import static ejercicio7NoTerminado.Cliente.Constantes.*;
 
 public class Main {
     private void ejercicio8() {

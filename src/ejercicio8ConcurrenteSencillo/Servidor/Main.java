@@ -1,6 +1,4 @@
-package ejercicio8.Servidor;
-
-import java.util.Arrays;
+package ejercicio8ConcurrenteSencillo.Servidor;
 
 public class Main {
 
