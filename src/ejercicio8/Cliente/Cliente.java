@@ -40,7 +40,6 @@ public class Cliente {
     }
 
     public void enviarDatosInt( int numero ) throws IOException {
-        System.out.println(numero);
         enviarDatosString(String.valueOf(numero));
 
     }
