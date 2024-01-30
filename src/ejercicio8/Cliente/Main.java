@@ -24,7 +24,7 @@ public class Main {
             do {
                 System.out.println(cliente.recibirDatos());
                 tipoOperacion = con.readIntInRange();
-                cliente.enviarDatosInt(tipoOperacion);
+                cliente.enviarDatosString(String.valueOf(tipoOperacion));
                 controlador = cliente.recibirDatos();
                 if ( controlador.equals(PALABRA_SALIDA) ) {
                     salida = true;
@@ -43,7 +43,7 @@ public class Main {
             } while (!salida);
             System.out.println("Hemos salida del programa");
         } catch (Exception e) {
-            System.err.println(ERROR_CREAR_DATAGRAM);
+            System.err.println(e);
         }
     }
 

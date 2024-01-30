@@ -11,6 +11,7 @@ public class Main {
         boolean salida = false;
         try {
             servidor = new Servidor();
+            System.out.println("Server iniciado");
             servidor.recibirDatos();
             do {
                 servidor.enviarDatosString(Constantes.TEXT_MENU);

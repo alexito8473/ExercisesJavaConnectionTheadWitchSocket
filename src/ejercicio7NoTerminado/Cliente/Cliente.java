@@ -1,6 +1,6 @@
-package ejercicio8.Cliente;
+package ejercicio7NoTerminado.Cliente;
 
-import ejercicio8.Constante.ConstanteGlobal;
+import ejercicio7NoTerminado.Constante.ConstanteGlobal;
 
 import java.io.IOException;
 import java.net.*;
@@ -40,7 +40,6 @@ public class Cliente {
     }
 
     public void enviarDatosInt( int numero ) throws IOException {
-        System.out.println(numero);
         enviarDatosString(String.valueOf(numero));
 
     }

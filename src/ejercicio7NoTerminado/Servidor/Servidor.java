@@ -1,7 +1,7 @@
-package ejercicio8.Servidor;
+package ejercicio7NoTerminado.Servidor;
 
-import ejercicio8.Cliente.Constantes;
-import ejercicio8.Constante.ConstanteGlobal;
+import ejercicio7NoTerminado.Cliente.Constantes;
+import ejercicio7NoTerminado.Constante.ConstanteGlobal;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

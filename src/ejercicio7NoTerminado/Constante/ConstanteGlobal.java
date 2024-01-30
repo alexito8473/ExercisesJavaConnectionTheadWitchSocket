@@ -1,4 +1,4 @@
-package ejercicio8.Constante;
+package ejercicio7NoTerminado.Constante;
 
 public class ConstanteGlobal {
     public static final int PUERTO = 5000;
