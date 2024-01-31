@@ -1,4 +1,4 @@
-package ejercicio8ConcurrenteSencillo.Servidor;
+package udpConexionEstablecer.Servidor;
 
 public class Main {
     public void ejercicio8() {

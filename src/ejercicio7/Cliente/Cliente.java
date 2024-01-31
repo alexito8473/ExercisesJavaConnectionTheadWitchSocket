@@ -1,14 +1,14 @@
-package ejercicio8.Cliente;
+package ejercicio7.Cliente;
 
-import ejercicio8.ConsoleInput;
-import ejercicio8.Constante.ConstanteGlobal;
+import ejercicio7.ConsoleInput;
+import ejercicio7.Constante.ConstanteGlobal;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
 import static ejercicio7.Cliente.Constantes.*;
-import static ejercicio7.Cliente.Constantes.TEXT_RESTA;
+import static ejercicio7.Cliente.Constantes.NUM_SALIR;
 
 public class Cliente {
     private final DatagramSocket socket;
@@ -24,45 +24,26 @@ public class Cliente {
     public void conversacion() throws IOException {
         boolean salida = false;
         ConsoleInput con = new ConsoleInput(new Scanner(System.in));
-        String tipoOperacion;
+        int tipoOperacion;
         double numero1;
-        boolean controlador;
         double numero2;
-        enviarDatosString("");
         do {
-            System.out.println(recibirDatos());
-            tipoOperacion = con.readString();
-            enviarDatosString(tipoOperacion);
-            controlador = Boolean.valueOf(recibirDatos());
-            if ( controlador ) {
-                if ( Boolean.valueOf(recibirDatos()) ) {
-                    salida = true;
-                } else {
-                    System.out.println("Introduce un numero");
-                    numero1 = con.readDouble();
-                    System.out.println("Introduce un numero");
-                    numero2 = con.readDouble();
-                    enviarDatosDouble(numero1);
-                    enviarDatosDouble(numero2);
-                    System.out.printf("El tipo de operación es %-6s con el numero %.2f y el numero %.2f, con el resultado %s\n", tipoOperacion(Integer.parseInt(tipoOperacion)), numero1, numero2, recibirDatos());
-                }
+            System.out.println(TEXT_MENU);
+            tipoOperacion = con.readIntInRange(NUM_SALIR, NUM_SUMAR, NUM_MULTIPLICAR, NUM_DIVIDIR, NUM_RESTO, NUM_RESTA);
+            if ( tipoOperacion == NUM_SALIR ) {
+                salida=true;
             } else {
-                System.out.println("Introduce un numero que este en el rango");
+                System.out.println("Introduce un numero");
+                numero1=con.readDouble();
+                System.out.println("Introduce un numero");
+                numero2=con.readDouble();
+                enviarDatosInt(tipoOperacion);
+                enviarDatosDouble(numero1);
+                enviarDatosDouble(numero2);
+                System.out.printf("El tipo de operación es %-6s con el numero %.2f y el numero %.2f, con el resultado %s\n",tipoOperacion(tipoOperacion),numero1,numero2,recibirDatos());
             }
         } while (!salida);
         System.out.println("Hemos salida del programa");
-    }
-
-    public String recibirDatos() {
-        byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
-        DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
-        try {
-            socket.receive(datos);
-            return new String(datos.getData()).trim();
-        } catch (IOException e) {
-            System.out.println("No he recibido nada");
-        }
-        return "";
     }
     private String tipoOperacion( int numero ) {
         return switch (numero) {
@@ -74,6 +55,18 @@ public class Cliente {
             default -> throw new IllegalStateException("Unexpected value: " + numero);
         };
     }
+    public String recibirDatos() {
+        byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
+        DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
+        try {
+            socket.receive(datos);
+            return new String(datos.getData()).trim();
+        } catch (IOException e) {
+            System.out.println("No he recibido nada");
+        }
+        return "";
+    }
+
     public void enviarDatosString( String mensaje ) throws IOException {
         byte[] mensajeBytes = mensaje.getBytes();
         DatagramPacket datos;

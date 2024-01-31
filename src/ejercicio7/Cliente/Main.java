@@ -1,10 +1,11 @@
-package ejercicio8ConcurrenteSencillo.Cliente;
+package ejercicio7.Cliente;
 
 
 public class Main {
-    private void ejercicio8() {
+    private void ejercicio7() {
         System.out.println("---Estamos en el cliente---");
         Cliente cliente;
+
         try {
             cliente = new Cliente();
             cliente.conversacion();
@@ -12,7 +13,10 @@ public class Main {
             System.err.println(e);
         }
     }
+
+
+
     public static void main( String[] args ) {
-        new Main().ejercicio8();
+        new Main().ejercicio7();
     }
 }

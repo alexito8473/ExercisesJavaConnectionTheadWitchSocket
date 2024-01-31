@@ -1,4 +1,4 @@
-package ejercicio8ConcurrenteSencillo.Cliente;
+package udpConexionEstablecer.Cliente;
 
 
 public class Main {
@@ -7,7 +7,7 @@ public class Main {
         Cliente cliente;
         try {
             cliente = new Cliente();
-            cliente.conversacion();
+            cliente.establecerConexion();
         } catch (Exception e) {
             System.err.println(e);
         }

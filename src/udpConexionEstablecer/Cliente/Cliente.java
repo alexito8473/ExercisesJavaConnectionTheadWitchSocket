@@ -1,4 +1,4 @@
-package ejercicio8ConcurrenteSencillo.Cliente;
+package udpConexionEstablecer.Cliente;
 
 import ejercicio7.Cliente.Constantes;
 import ejercicio7.ConsoleInput;
@@ -13,21 +13,31 @@ import static ejercicio7.Cliente.Constantes.*;
 public class Cliente {
     private final DatagramSocket socket;
     private final InetAddress destinoIp;
-    private final int puerto;
+    private int puerto;
+    private byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
+    private final DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
 
     public Cliente() throws SocketException, UnknownHostException {
         socket = new DatagramSocket(); // Lo vamos a asociar aleatoriamente
-        destinoIp = InetAddress.getByName(ejercicio7.Constante.ConstanteGlobal.DIRECCION_SERVIDOR);
-        puerto = ejercicio7.Constante.ConstanteGlobal.PUERTO;
+        destinoIp = InetAddress.getByName(ConstanteGlobal.DIRECCION_SERVIDOR);
+        puerto = ConstanteGlobal.PUERTO;
     }
 
+    public void establecerConexion() throws IOException {
+        enviarDatosString("");
+        try{
+            socket.receive(datos);
+        }catch (Exception e){
+        }
+        puerto = datos.getPort();
+        conversacion();
+    }
     public void conversacion() throws IOException {
         boolean salida = false;
         ConsoleInput con = new ConsoleInput(new Scanner(System.in));
         int tipoOperacion;
         double numero1;
         double numero2;
-        enviarDatosString("");
         do {
             System.out.println(TEXT_MENU);
             tipoOperacion = con.readIntInRange(NUM_SALIR, NUM_SUMAR, NUM_MULTIPLICAR, NUM_DIVIDIR, NUM_RESTO, NUM_RESTA);
@@ -57,7 +67,7 @@ public class Cliente {
         };
     }
     public String recibirDatos() {
-        byte[] bytes = new byte[ejercicio7.Constante.ConstanteGlobal.BUFFER_MAX];
+        byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
         DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
         try {
             socket.receive(datos);

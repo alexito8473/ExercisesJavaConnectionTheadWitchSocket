@@ -1,7 +1,7 @@
-package ejercicio7NoTerminado.Servidor;
+package udpConexionEstablecer.Servidor;
 
-import ejercicio7NoTerminado.Cliente.Constantes;
-import ejercicio7NoTerminado.Constante.ConstanteGlobal;
+import ejercicio7.Cliente.Constantes;
+import ejercicio7.Constante.ConstanteGlobal;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -11,22 +11,49 @@ import java.net.SocketException;
 
 import static ejercicio8.Cliente.Constantes.*;
 
-public class Servidor {
+public class HiloServidor extends Thread {
     private final DatagramSocket socket;
+    private DatagramPacket datos;
+    private byte[] bytes;
     private int puerto;
     private InetAddress destinoIP;
 
-    public Servidor() throws SocketException {
-        socket = new DatagramSocket(ConstanteGlobal.PUERTO);
+    public HiloServidor( DatagramPacket datos ) throws SocketException {
+        this.socket = new DatagramSocket();
+        this.bytes = new byte[ConstanteGlobal.BUFFER_MAX];
+        destinoIP = datos.getAddress();
+        puerto = datos.getPort();
+        this.datos = datos;
+    }
+
+    @Override
+    public void run() {
+        double numero1, numero2;
+        int tipo;
+        boolean salida = false;
+        System.out.println();
+        try {
+            enviarDatosString("");
+        } catch (IOException e) {
+        }
+        do {
+            tipo = (int) Double.parseDouble(recibirDatos());
+            if ( tipo == Constantes.NUM_SALIR ) {
+                salida = false;
+            } else {
+                numero1 = Double.parseDouble(recibirDatos());
+                numero2 = Double.parseDouble(recibirDatos());
+                try {
+                    enviarDatosDouble(realizarOperacion(tipo, numero1, numero2));
+                } catch (IOException e) {
+                }
+            }
+        } while (!salida);
     }
 
     public String recibirDatos() {
-        byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
-        DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
         try {
             socket.receive(datos);
-            destinoIP = datos.getAddress();
-            puerto=datos.getPort();
             return new String(datos.getData()).trim();
         } catch (IOException e) {
             System.out.println("No he recibido nada");
@@ -36,10 +63,8 @@ public class Servidor {
 
     public void enviarDatosString( String mensaje ) throws IOException {
         byte[] mensajeBytes = mensaje.getBytes();
-        DatagramPacket datos;
         if ( mensajeBytes.length < ConstanteGlobal.BUFFER_MAX ) {
-            datos = new DatagramPacket(mensajeBytes, mensajeBytes.length, destinoIP, puerto);
-            socket.send(datos);
+            socket.send(new DatagramPacket(mensajeBytes, mensajeBytes.length, destinoIP, puerto));
         } else {
             System.out.println(Constantes.WARNING_MAX_LENGTH);
         }
@@ -48,11 +73,13 @@ public class Servidor {
     public void enviarDatosDouble( double numero ) throws IOException {
         enviarDatosString(String.valueOf(numero));
     }
+
     public void enviarDatosBoolean( boolean bandera ) throws IOException {
         enviarDatosString(String.valueOf(bandera));
     }
-    public double realizarOperacion( int tipo, double numero1, double numero2 ) {
-        return switch (tipo) {
+
+    public double realizarOperacion( double tipo, double numero1, double numero2 ) {
+        return switch ((int) tipo) {
             case NUM_SUMAR -> numero1 + numero2;
             case NUM_MULTIPLICAR -> numero1 * numero2;
             case NUM_DIVIDIR -> numero1 / numero2;

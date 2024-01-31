@@ -1,4 +1,4 @@
-package ejercicio7NoTerminado.Constante;
+package udpConexionEstablecer.Constante;
 
 public class ConstanteGlobal {
     public static final int PUERTO = 5000;

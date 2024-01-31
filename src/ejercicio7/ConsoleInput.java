@@ -1,4 +1,4 @@
-package ejercicio7NoTerminado;
+package ejercicio7;
 
 import java.util.Arrays;
 import java.util.InputMismatchException;
