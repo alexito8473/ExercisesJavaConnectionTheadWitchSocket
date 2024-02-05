@@ -9,21 +9,21 @@ import java.net.SocketException;
 
 public class Servidor {
     private final DatagramSocket socket;
-
+    private final byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
+    private final DatagramPacket data = new DatagramPacket(bytes,bytes.length);
     public Servidor() throws SocketException {
         this.socket = new DatagramSocket(ConstanteGlobal.PUERTO);
     }
 
     public void conversacion() throws SocketException {
-        byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
-        DatagramPacket data = new DatagramPacket(bytes,bytes.length);
         try {
             socket.receive(data);
+            HiloServidor hilo = new HiloServidor(data);
+            hilo.start();
+            System.out.println("Cliente conectado");
         } catch (IOException e) {
-            throw new RuntimeException("Erro en la espera");
+            System.out.println("Fallo en la conexión del cliente");
         }
-        HiloServidor hilo = new HiloServidor(data);
-        hilo.start();
-        System.out.println("Cliente conectado");
     }
+
 }

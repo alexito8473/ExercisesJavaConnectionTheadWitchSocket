@@ -62,9 +62,9 @@ public class HiloServidor extends Thread {
     }
 
     public void enviarDatosString( String mensaje ) throws IOException {
-        byte[] mensajeBytes = mensaje.getBytes();
-        if ( mensajeBytes.length < ConstanteGlobal.BUFFER_MAX ) {
-            socket.send(new DatagramPacket(mensajeBytes, mensajeBytes.length, destinoIP, puerto));
+        bytes = mensaje.getBytes();
+        if ( bytes.length < ConstanteGlobal.BUFFER_MAX ) {
+            socket.send(new DatagramPacket(bytes, bytes.length, destinoIP, puerto));
         } else {
             System.out.println(Constantes.WARNING_MAX_LENGTH);
         }

@@ -1,6 +1,4 @@
-package ejercicio8ConcurrenteSencillo.Servidor;
-
-import ejercicio8ConcurrenteSencillo.Servidor.Servidor;
+package udpConcurrenteSencilloArreglado.Servidor;
 
 public class Main {
     public void ejercicio8() {

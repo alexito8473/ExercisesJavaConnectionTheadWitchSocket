@@ -13,24 +13,25 @@ import static ejercicio7.Cliente.Constantes.*;
 public class Cliente {
     private final DatagramSocket socket;
     private final InetAddress destinoIp;
-    private int puerto;
+    private int puertoEnviarDatos;
     private byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
     private final DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
 
     public Cliente() throws SocketException, UnknownHostException {
         socket = new DatagramSocket(); // Lo vamos a asociar aleatoriamente
         destinoIp = InetAddress.getByName(ConstanteGlobal.DIRECCION_SERVIDOR);
-        puerto = ConstanteGlobal.PUERTO;
+        puertoEnviarDatos = ConstanteGlobal.PUERTO;
     }
 
     public void establecerConexion() throws IOException {
         enviarDatosString("");
         try{
             socket.receive(datos);
+            puertoEnviarDatos = datos.getPort();
+            conversacion();
         }catch (Exception e){
+            System.err.println("Fallo en la conexión con el servidor");
         }
-        puerto = datos.getPort();
-        conversacion();
     }
     public void conversacion() throws IOException {
         boolean salida = false;
@@ -81,7 +82,7 @@ public class Cliente {
     public void enviarDatosString( String mensaje ) throws IOException {
         byte[] mensajeBytes = mensaje.getBytes();
         if ( mensajeBytes.length < ConstanteGlobal.BUFFER_MAX ) {
-            socket.send(new DatagramPacket(mensajeBytes, mensajeBytes.length, destinoIp, puerto));
+            socket.send(new DatagramPacket(mensajeBytes, mensajeBytes.length, destinoIp, puertoEnviarDatos));
         } else {
             System.out.println(Constantes.WARNING_MAX_LENGTH);
         }

@@ -1,4 +1,4 @@
-package ejercicio8ConcurrenteSencillo.Cliente;
+package udpConcurrenteSencilloArreglado.Cliente;
 
 import ejercicio7.Cliente.Constantes;
 import ejercicio7.ConsoleInput;
@@ -17,8 +17,8 @@ public class Cliente {
 
     public Cliente() throws SocketException, UnknownHostException {
         socket = new DatagramSocket(); // Lo vamos a asociar aleatoriamente
-        destinoIp = InetAddress.getByName(ejercicio7.Constante.ConstanteGlobal.DIRECCION_SERVIDOR);
-        puerto = ejercicio7.Constante.ConstanteGlobal.PUERTO;
+        destinoIp = InetAddress.getByName(ConstanteGlobal.DIRECCION_SERVIDOR);
+        puerto = ConstanteGlobal.PUERTO;
     }
 
     public void conversacion() throws IOException {
@@ -27,19 +27,13 @@ public class Cliente {
         int tipoOperacion;
         double numero1;
         double numero2;
-        String concatenacion;
         do {
             System.out.println(TEXT_MENU);
             tipoOperacion = con.readIntInRange(NUM_SALIR, NUM_SUMAR, NUM_MULTIPLICAR, NUM_DIVIDIR, NUM_RESTO, NUM_RESTA);
             if ( tipoOperacion == NUM_SALIR ) {
                 salida=true;
             } else {
-                System.out.println("Introduce un numero");
-                numero1=con.readDouble();
-                System.out.println("Introduce un numero");
-                numero2=con.readDouble();
-                concatenacion=String.format("%d:%.2f:%.2f:",tipoOperacion,numero1,numero2);
-                enviarDatosString(concatenacion);
+                enviarDatosString(String.format("%d:%.2f:%.2f:",tipoOperacion,numero1=con.readDouble("Introduce un numero"), numero2=con.readDouble("Introduce un numero")));
                 System.out.printf("El tipo de operación es %-6s con el numero %.2f y el numero %.2f, con el resultado %s\n",tipoOperacion(tipoOperacion),numero1,numero2,recibirDatos());
             }
         } while (!salida);
@@ -56,7 +50,7 @@ public class Cliente {
         };
     }
     public String recibirDatos() {
-        byte[] bytes = new byte[ejercicio7.Constante.ConstanteGlobal.BUFFER_MAX];
+        byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
         DatagramPacket datos = new DatagramPacket(bytes, bytes.length);
         try {
             socket.receive(datos);

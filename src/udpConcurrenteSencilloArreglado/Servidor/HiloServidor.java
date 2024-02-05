@@ -1,4 +1,4 @@
-package ejercicio8ConcurrenteSencillo.Servidor;
+package udpConcurrenteSencilloArreglado.Servidor;
 
 import ejercicio7.Cliente.Constantes;
 import ejercicio7.Constante.ConstanteGlobal;
@@ -13,44 +13,27 @@ import static ejercicio8.Cliente.Constantes.*;
 
 public class HiloServidor extends Thread {
     private final DatagramSocket socket;
-    private DatagramPacket datos;
-    private byte[] bytes= new byte[ConstanteGlobal.BUFFER_MAX];
+    private byte[] bytes = new byte[ConstanteGlobal.BUFFER_MAX];
     private int puerto;
     private InetAddress destinoIP;
+    private final String mensaje;
 
-    public HiloServidor( DatagramSocket socket ) {
+    public HiloServidor( DatagramSocket socket, String mensaje , DatagramPacket data) {
         this.socket = socket;
+        this.mensaje = mensaje;
+        destinoIP = data.getAddress();
+        puerto = data.getPort();
     }
 
     @Override
     public void run() {
-        double numero1, numero2;
-        int tipo;
-        System.out.println();
-        String[] cocatenacion = recibirDatos().trim().split(":");
-        Arrays.stream(cocatenacion).forEach(t -> System.out.println(t));
-        tipo = Integer.valueOf(cocatenacion[0]);
-        numero1 = Double.valueOf(cocatenacion[1].replace(",","."));
-        numero2 = Double.valueOf(cocatenacion[2].replace(",","."));
+        String[] cocatenacion = mensaje.trim().split(":");
         try {
-            enviarDatosDouble(realizarOperacion(tipo, numero1, numero2));
+            enviarDatosDouble(realizarOperacion(Integer.valueOf(cocatenacion[0]),  Double.valueOf(cocatenacion[1].replace(",",".")), Double.valueOf(cocatenacion[2].replace(",","."))));
         } catch (IOException e) {
         }
     }
 
-
-    public String recibirDatos() {
-        datos = new DatagramPacket(bytes,bytes.length);
-        try {
-            socket.receive(datos);
-            destinoIP = datos.getAddress();
-            puerto = datos.getPort();
-            return new String(datos.getData()).trim();
-        } catch (IOException e) {
-            System.out.println("No he recibido nada");
-        }
-        return "-1";
-    }
 
     public void enviarDatosString( String mensaje ) throws IOException {
         byte[] mensajeBytes = mensaje.getBytes();
